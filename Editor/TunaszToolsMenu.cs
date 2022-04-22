@@ -56,6 +56,9 @@ namespace TunaszUtils
             go.transform.SetParent( Selection.activeTransform); 
             go.transform.localScale = Vector3.one;
             go.transform.localPosition = Vector3.zero;
+            var panel = go.GetComponent<MainMenuPanel>();
+            panel.childButtonHolder.Add(go.transform);
+
         }
         [MenuItem("GameObject/TunaszUtils/UI/PopUp", priority = 9)] 
         public static void AddPopUp()
