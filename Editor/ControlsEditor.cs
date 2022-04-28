@@ -17,52 +17,31 @@ namespace TunaszUtils
             uiControlsParent_Prop,
             controlUIPrefab_Prop,
             controlSaveName_Prop,
-            search_Prop,
-            selectionValue_Prop,
             controlNames_Prop,
             defaultKeys_Prop,
-            selectionValueString_Prop
-            ; 
-        List<string> enumTypes ;
-        List<Type> types;
+            componentTypeName_Prop
+            ;  
         List<SerializedProperty> optionPicked_Props;
+        List<SerializedProperty> canBeDuplicate_Props;
         Controls controls;
         private void OnEnable()
         { 
-            controls = target as Controls;
-            enumTypes = new List<string>();
-            types = new List<Type>();
+            controls = target as Controls; 
             optionPicked_Props = new List<SerializedProperty>();
+            canBeDuplicate_Props = new List<SerializedProperty>();
             Script_Prop = serializedObject.FindProperty("m_Script"); 
             uiControlsParent_Prop = serializedObject.FindProperty("uiControlsParent"); 
             controlUIPrefab_Prop = serializedObject.FindProperty("controlUIPrefab"); 
-            controlSaveName_Prop = serializedObject.FindProperty("controlSaveName");
-            search_Prop = serializedObject.FindProperty("search");
-            selectionValue_Prop = serializedObject.FindProperty("selectionValue");
+            controlSaveName_Prop = serializedObject.FindProperty("controlSaveName"); 
             controlNames_Prop= serializedObject.FindProperty("controlNames");
-            defaultKeys_Prop = serializedObject.FindProperty("defaultKeys");
-            selectionValueString_Prop = serializedObject.FindProperty("selectionValueString");
+            defaultKeys_Prop = serializedObject.FindProperty("defaultKeys"); 
+            componentTypeName_Prop = serializedObject.FindProperty("componentTypeName");
+            
             for (int i = 0; i < controls.defaultKeys.saveKeys.Count; i++)
             { 
                 optionPicked_Props.Add(serializedObject.FindProperty("defaultKeys").FindPropertyRelative("saveKeys").GetArrayElementAtIndex(i).FindPropertyRelative("optionPicked"));
-            }
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in assemblies)
-            { 
-                foreach (var item in assembly.GetTypes())
-                {
-                    if (item.IsEnum)
-                    {
-                        if (item.Name.Contains(search_Prop.stringValue))
-                        {
-                            enumTypes.Add(item.FullName);
-
-                            types.Add(item); 
-
-                        }
-                    }
-                } 
-            }
+                canBeDuplicate_Props.Add(serializedObject.FindProperty("defaultKeys").FindPropertyRelative("saveKeys").GetArrayElementAtIndex(i).FindPropertyRelative("canBeDuplicate"));
+            } 
 
 
         }
@@ -74,44 +53,19 @@ namespace TunaszUtils
             EditorGUILayout.PropertyField(Script_Prop);
             EditorGUILayout.PropertyField(controlNames_Prop);
             EditorGUILayout.PropertyField(defaultKeys_Prop);
-            EditorGUILayout.PropertyField(selectionValueString_Prop);
             
             GUI.enabled = true;
             EditorGUILayout.PropertyField(uiControlsParent_Prop);
             EditorGUILayout.PropertyField(controlUIPrefab_Prop);
             EditorGUILayout.PropertyField(controlSaveName_Prop);
+            EditorGUILayout.PropertyField(componentTypeName_Prop);
+             
             EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(search_Prop);
-            if (EditorGUI.EndChangeCheck())
-            {
-                enumTypes = new List<string>();
-                types = new List<Type>();
-
-                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                foreach (var assembly in assemblies)
-                {
-                    foreach (var item in assembly.GetTypes())
-                    {
-                        if (item.IsEnum)
-                        {
-                            if (item.FullName.Contains(search_Prop.stringValue))
-                            {
-                                enumTypes.Add(item.FullName);
-                            types.Add(item); 
-
-                            }
-                        }
-                    }
-                }
-            }
-            EditorGUI.BeginChangeCheck();
-            selectionValue_Prop.intValue = enumTypes.IndexOf(selectionValueString_Prop.stringValue);
-            selectionValue_Prop .intValue= EditorGUILayout.Popup(selectionValue_Prop.intValue, enumTypes.ToArray());
             serializedObject.ApplyModifiedProperties();
             serializedObject.Update();
-            var enumStringList = EnumExtenstions.GetWithOrder(types[selectionValue_Prop.intValue]).ToArray();
-            
-            if (EditorGUI.EndChangeCheck())
+            var enumStringList = EnumExtenstions.GetWithOrder(System. Type.GetType(componentTypeName_Prop.stringValue)).ToArray();
+
+            if (EditorGUI.EndChangeCheck() || controlNames_Prop.arraySize!= enumStringList.Length)
             {
                 controlNames_Prop.ClearArray();
                 for (int i = 0; i < enumStringList.Length; i++)
@@ -119,7 +73,6 @@ namespace TunaszUtils
                     controlNames_Prop.InsertArrayElementAtIndex(i);
                     controlNames_Prop.GetArrayElementAtIndex(i).stringValue = enumStringList[i];
                 }
-                selectionValueString_Prop.stringValue = enumTypes[selectionValue_Prop.intValue];
                 serializedObject.ApplyModifiedProperties();
                 serializedObject.Update();
             }
@@ -131,6 +84,7 @@ namespace TunaszUtils
             {
                 controls.defaultKeys.saveKeys.RemoveAt(controls.defaultKeys.saveKeys.Count - 1);
                 optionPicked_Props.RemoveAt(controls.defaultKeys.saveKeys.Count - 1);
+                canBeDuplicate_Props.RemoveAt(controls.defaultKeys.saveKeys.Count - 1);
             }
             for (int i = 0; i < enumStringList.Length; i++)
             {
@@ -138,13 +92,16 @@ namespace TunaszUtils
                 {
                     controls.defaultKeys.saveKeys.Add(new KeyHolder(i, 1));
                 optionPicked_Props.Add(serializedObject.FindProperty("defaultKeys").FindPropertyRelative("saveKeys").GetArrayElementAtIndex(i).FindPropertyRelative("optionPicked"));
+                canBeDuplicate_Props.Add(serializedObject.FindProperty("defaultKeys").FindPropertyRelative("saveKeys").GetArrayElementAtIndex(i).FindPropertyRelative("canBeDuplicate"));
                     Debug.Log("asd");
                 }
                 serializedObject.ApplyModifiedProperties();
                 serializedObject.Update(); 
                 string item = enumStringList[i];
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(item);
+                EditorGUILayout.LabelField(item,GUILayout.Width(150));
+                EditorGUILayout.LabelField("Can be Duplicate", GUILayout.Width(100));
+                canBeDuplicate_Props[i].boolValue=EditorGUILayout.Toggle(canBeDuplicate_Props[i].boolValue);
                 controls.defaultKeys.saveKeys[i].search= EditorGUILayout.TextField(controls.defaultKeys.saveKeys[i].search);
                 serializedObject.ApplyModifiedProperties();
                 serializedObject.Update();
@@ -164,7 +121,6 @@ namespace TunaszUtils
                     //controls.defaultKeys.saveKeys[i].optionPicked= index==-1? 0  : index;
                        
                     optionPicked_Props[i].intValue = EditorGUILayout.Popup(optionPicked_Props[i].intValue, keyEnumList);
-                      
                     serializedObject.ApplyModifiedProperties();
                     serializedObject.Update();
                     controls.defaultKeys.saveKeys[i].keyBinding = Convert.ToInt32( 

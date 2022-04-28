@@ -30,7 +30,7 @@ public static class AssetLoading
                     if (assetPath.Contains(string.Concat(".",item)) && !assetPath.Contains(".meta"))
                     {
                         objects.Add(AssetDatabase.LoadMainAssetAtPath(assetPath));
-                        Debug.Log("Loaded " + assetPath);
+                        //Debug.Log("Loaded " + assetPath);
                     }
                 }
             }
