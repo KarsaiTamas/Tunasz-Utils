@@ -8,7 +8,7 @@ namespace TunaszUtils
 {
     public class MainUICanvasPanels : MonoBehaviour
     {
-        public static MainUICanvasPanels instance;
+        //public static MainUICanvasPanels instance;
         public List<MainMenuPanel> panels;
         private int selectedPanel;
         //I can put events here
@@ -24,14 +24,14 @@ namespace TunaszUtils
             }
         }
 
-        private void Awake()
-        {
-            instance = this;
+        //private void Awake()
+        //{
+        //    instance = this;
 
-        }
+        //}
         private void OnValidate()
         {
-            instance = this;
+            //instance = this;
             panels = new List<MainMenuPanel>();
             foreach (Transform item in transform)
             {

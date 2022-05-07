@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -153,8 +154,8 @@ namespace TunaszUtils
         }
         [MenuItem("Tools/TunaszUtils/Script Reload", priority = 7)]
         public static void ForceScriptReload()
-        {
-            EditorUtility.RequestScriptReload();
+        { 
+            CompilationPipeline.RequestScriptCompilation();
         }
 
 

@@ -6,12 +6,13 @@
  */
 
 using UnityEngine;
-using System;
+using System; 
 namespace TunaszUtils
 {
     public class LabeledArrayAttribute : PropertyAttribute
-{
-    public readonly string[] names;
-    public LabeledArrayAttribute(string[] names) { this.names = names; }
-    public LabeledArrayAttribute(Type enumType) { names = Enum.GetNames(enumType); }
-}}
+    {
+        public readonly string[] names;
+        public LabeledArrayAttribute(string[] names) { this.names = names; }
+        public LabeledArrayAttribute(Type enumType) { names = Enum.GetNames(enumType); } 
+    }
+}

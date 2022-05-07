@@ -15,6 +15,11 @@ namespace TunaszUtils
         [MonoScript(type = typeof(System.Enum))]
         public string componentTypeName;
         //
+        public static BaseSpritePrefs instance;
+        private void Awake()
+        {
+            instance = this;
+        }
         protected virtual void OnValidate()
         {
 
@@ -39,12 +44,19 @@ namespace TunaszUtils
                 }
             }
             
-             
-            var spriteType = EnumExtenstions.GetWithOrder(System. Type.GetType(componentTypeName)).ToList();
+            
+
+            var inventoryType = EnumExtenstions.GetWithOrder(System.Type.GetType(componentTypeName)).ToList();
             for (int i = 0; i < prefabs.Count; i++)
             {
-                prefabs[i].name = spriteType[i];
+
+                var itemSwitch = prefabs.FirstOrDefault(x => x.name.Equals(inventoryType[i + 1].ToString())); 
+                if (prefabs.IndexOf(itemSwitch) == -1) continue;
+                
+                prefabs[prefabs.IndexOf(itemSwitch)] = prefabs[i]; 
+                prefabs[i] = itemSwitch;
             }
+
         }
     }
 }

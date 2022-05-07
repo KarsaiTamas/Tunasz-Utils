@@ -124,6 +124,7 @@ namespace TunaszUtils
         public MainMenuPanel targetPanel;
         private void OnEnable()
         {
+            serializedObject.Update();
 
             targetPanel = (MainMenuPanel)target;
 
@@ -144,8 +145,19 @@ namespace TunaszUtils
                 SerializedObject curElement = new SerializedObject(obj.objectReferenceValue);
 
                 buttons.Add(new SerializedButton(curElement));
+                for (int j = 0; j < buttons[i].actionsContent.Count; j++)
+                {
+                    buttons[i].actionsContent[j].selectedScript_Prop.intValue =
+                    buttons[i].actionsContent[j].methods.IndexOf(buttons[i].actionsContent[j].methods.FirstOrDefault(x =>
+                    x.Name == buttons[i].buttonData.actionsToPerform[j].actionName));
+                }
+
+
+                
             }
             ReloadButtons();
+             
+            serializedObject.ApplyModifiedProperties();
 
         }
         public override void OnInspectorGUI()
@@ -345,10 +357,20 @@ namespace TunaszUtils
                                     //    buttonAction.selectedScript_Prop.intValue = val2 != -1 ? val2 : 0; 
                                     //}
                                     EditorGUI.BeginChangeCheck();
-
+                                    if (button.actionsContent[j].methods.IndexOf(button.actionsContent[j].methods.FirstOrDefault(x =>
+                                        x.Name == buttons[i].buttonData.actionsToPerform[j].actionName))!= buttonAction.selectedScript_Prop.intValue && buttonAction.selectedScript_Prop.intValue!=-1)
+                                    {
+                                        buttonAction.selectedScript_Prop.intValue =
+                                            button.actionsContent[j].methods.IndexOf(button.actionsContent[j].methods.FirstOrDefault(x =>
+                                            x.Name == buttons[i].buttonData.actionsToPerform[j].actionName));
+                                    }
+                                    if (buttonAction.selectedScript_Prop.intValue==-1)
+                                    {
+                                        buttonAction.selectedScript_Prop.intValue = 0;
+                                    }
                                     button.button_Obj.ApplyModifiedProperties();
                                     button.button_Obj.Update();
-
+                                    
                                     buttonAction.selectedScript_Prop.intValue =
                                     EditorGUILayout.Popup("Function", buttonAction.selectedScript_Prop.intValue,
                                     scriptSelect);

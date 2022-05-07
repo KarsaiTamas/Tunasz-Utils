@@ -82,18 +82,24 @@ namespace TunaszUtils
             }
             while (enumStringList.Length< controls.defaultKeys.saveKeys.Count)
             {
-                controls.defaultKeys.saveKeys.RemoveAt(controls.defaultKeys.saveKeys.Count - 1);
                 optionPicked_Props.RemoveAt(controls.defaultKeys.saveKeys.Count - 1);
                 canBeDuplicate_Props.RemoveAt(controls.defaultKeys.saveKeys.Count - 1);
+                controls.defaultKeys.saveKeys.RemoveAt(controls.defaultKeys.saveKeys.Count - 1);
+                 
             }
+
+            serializedObject.ApplyModifiedProperties();
+            serializedObject.Update();
             for (int i = 0; i < enumStringList.Length; i++)
             {
                 if (controls.defaultKeys.saveKeys.Count<= i)
                 {
                     controls.defaultKeys.saveKeys.Add(new KeyHolder(i, 1));
-                optionPicked_Props.Add(serializedObject.FindProperty("defaultKeys").FindPropertyRelative("saveKeys").GetArrayElementAtIndex(i).FindPropertyRelative("optionPicked"));
+
+                    serializedObject.ApplyModifiedProperties();
+                    serializedObject.Update();
+                    optionPicked_Props.Add(serializedObject.FindProperty("defaultKeys").FindPropertyRelative("saveKeys").GetArrayElementAtIndex(i).FindPropertyRelative("optionPicked"));
                 canBeDuplicate_Props.Add(serializedObject.FindProperty("defaultKeys").FindPropertyRelative("saveKeys").GetArrayElementAtIndex(i).FindPropertyRelative("canBeDuplicate"));
-                    Debug.Log("asd");
                 }
                 serializedObject.ApplyModifiedProperties();
                 serializedObject.Update(); 

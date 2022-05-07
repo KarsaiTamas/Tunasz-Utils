@@ -19,6 +19,8 @@ namespace TunaszUtils
         public delegate void StateScript();
         public StateScript StateUpdateAction;
         public StateScript StateFixedUpdateAction;
+        public delegate Type StateName();
+        public StateName stateName;
         public int entityType;
         //Anything goes here which we want to save from an entity so we can load it back 
         // This goes to save data if we want to save and load animations and wait timings

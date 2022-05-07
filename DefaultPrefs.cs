@@ -7,9 +7,12 @@ namespace TunaszUtils
 {
     public class DefaultPrefs : MonoBehaviour
     {
-        public string fileLoc; 
+        public string fileLoc;
         //public List<YourPrefClass> prefabs;
         //
+
+        [MonoScript(type = typeof(System.Enum))]
+        public string componentTypeName;
         protected virtual void OnValidate()
         {
 
@@ -32,6 +35,10 @@ namespace TunaszUtils
             //{
             //    prefabs.Add(item.GetComponent<YourPrefClass>());
             //}
+
+
+            //var spriteType = EnumExtenstions.GetWithOrder(System.Type.GetType(componentTypeName)).ToList();
+             
         }
     }
 }

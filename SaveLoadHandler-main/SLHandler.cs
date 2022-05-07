@@ -68,6 +68,7 @@ namespace TunaszUtils
         /// <returns>Save data from file</returns>
         public static T Load<T>(T defaultData, string saveName, string saveFolder = "\\SaveFiles\\")
         {
+            
             try
             {
                 string jsonValue= File.ReadAllText(path+ saveFolder + saveName + ".json");
@@ -82,6 +83,56 @@ namespace TunaszUtils
                     }
                 return value;
                 }
+            catch (IOException)
+            {
+                return defaultData;
+            }
+        }
+        /// <summary>
+        /// Saves a json file to the path's location
+        /// </summary>
+        /// <typeparam name="T">Save type</typeparam>
+        /// <param name="dataToSave">Value to save</param>
+        /// <param name="saveName">Save file's name</param>
+        public static void SaveEditor<T>(T dataToSave, string saveName)
+        {
+            string write = JsonUtility.ToJson(dataToSave);
+            try
+            {
+                //if a directory is missing than creat the missing path
+                 
+                File.WriteAllText(Application.dataPath+"\\" + saveName + ".json", write);
+            }
+            catch (IOException)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Loads a json file from the path's location
+        /// </summary>
+        /// <typeparam name="T">Load type</typeparam>
+        /// <param name="defaultData">Default value in case of an error</param>
+        /// <param name="saveName">Load file's name</param>
+        /// <returns>Save data from file</returns>
+        public static T LoadEditor<T>(T defaultData, string saveName)
+        {
+
+            try
+            {
+                string jsonValue = File.ReadAllText(Application.dataPath+"\\" + saveName + ".json");
+                if (jsonValue.Equals("{}") || jsonValue.Equals("{ }"))
+                {
+                    return defaultData;
+                }
+                T value = JsonUtility.FromJson<T>(jsonValue);
+                if (value == null)
+                {
+                    return defaultData;
+                }
+                return value;
+            }
             catch (IOException)
             {
                 return defaultData;
