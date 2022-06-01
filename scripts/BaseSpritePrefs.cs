@@ -10,10 +10,11 @@ namespace TunaszUtils
     public class BaseSpritePrefs : MonoBehaviour
     {
         public string fileLoc; 
+        //[LabeledArray(componentTypeName)]
         public List<Texture2D> prefabs;
 
         [MonoScript(type = typeof(System.Enum))]
-        public string componentTypeName;
+        public string componentTypeName="";
         //
         public static BaseSpritePrefs instance;
         private void Awake()
@@ -34,7 +35,7 @@ namespace TunaszUtils
         }
         protected virtual void OrderList(List<Object> prefabsTemp)
         {
-            if (prefabsTemp.Count!=prefabs.Count)
+            if (prefabsTemp.Count != prefabs.Count)
             {
                 prefabs = new List<Texture2D>();
 
@@ -43,17 +44,18 @@ namespace TunaszUtils
                     prefabs.Add(item as Texture2D);
                 }
             }
-            
-            
+
+
 
             var inventoryType = EnumExtenstions.GetWithOrder(System.Type.GetType(componentTypeName)).ToList();
             for (int i = 0; i < prefabs.Count; i++)
             {
-
-                var itemSwitch = prefabs.FirstOrDefault(x => x.name.Equals(inventoryType[i + 1].ToString())); 
-                if (prefabs.IndexOf(itemSwitch) == -1) continue;
+                if (inventoryType.Count <= i + 1) continue;
                 
-                prefabs[prefabs.IndexOf(itemSwitch)] = prefabs[i]; 
+                var itemSwitch = prefabs.FirstOrDefault(x => x.name.Equals(inventoryType[i + 1].ToString()));
+                if (prefabs.IndexOf(itemSwitch) == -1) continue;
+
+                prefabs[prefabs.IndexOf(itemSwitch)] = prefabs[i];
                 prefabs[i] = itemSwitch;
             }
 

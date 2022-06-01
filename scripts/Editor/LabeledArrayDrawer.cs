@@ -15,12 +15,13 @@ namespace TunaszUtils
 public class LabeledArrayDrawer : PropertyDrawer
 {
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        return EditorGUI.GetPropertyHeight(property, label);
+    { 
+            return EditorGUI.GetPropertyHeight(property, label);
     }
 
     public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
     {
+
         EditorGUI.BeginProperty(rect, label, property);
         try
         {
@@ -34,4 +35,5 @@ public class LabeledArrayDrawer : PropertyDrawer
         }
         EditorGUI.EndProperty();
     }
-}}
+}
+}

@@ -37,7 +37,9 @@ namespace TunaszUtils
 
         protected virtual void OnValidate()
         {
-            var estats = StatsLength(StatEnumType()); 
+            var estats = StatsLength(StatEnumType());
+            if (Stats == null) return;
+            
             if (Stats.Count == estats.Count) return;
 
             if (Stats.Count > estats.Count)
@@ -60,7 +62,7 @@ namespace TunaszUtils
         }
         public bool GetStatBool(Enum stat)
         {
-            return Mathf.Approximately(Mathf.Min(Stats[Convert.ToInt32(stat)],1),1);
+            return Stats[Convert.ToInt32(stat)]>0;
         }
         public int GetStatInt(Enum stat)
         {

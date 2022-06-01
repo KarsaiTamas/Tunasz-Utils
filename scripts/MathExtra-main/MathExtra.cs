@@ -103,9 +103,7 @@ namespace TunaszUtils
         float distance,
         float lerpT
         )
-        {
-             
-            //give it the ability to walk between the minimum and maximum leash range
+        { 
             return GetCoordinatesFromAngleGDistance(obj, dir, Mathf.Lerp (0,distance,lerpT));
 
         }

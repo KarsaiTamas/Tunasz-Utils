@@ -13,6 +13,11 @@ namespace TunaszUtils
     {
         public int selectedValue;
         public string value;
+
+        public ButtonActionValue(string value)
+        {
+            this.value = value;
+        }
     }
     [System.Serializable]
     public class ButtonAction
@@ -35,6 +40,22 @@ namespace TunaszUtils
             methodInfos = new List<MethodInfo>();
         }
 
+        public ButtonAction(GameObject objectScript, string actionName,params ButtonActionValue[] values)
+        {
+            search = "";
+            selectedScript = -1;
+            this.objectScript = objectScript;
+            this.actionName = actionName;
+            this.values = values.ToList();
+        }
+
+        public ButtonAction(GameObject objectScript, string actionName)
+        {
+            search = "";
+            selectedScript = -1;
+            this.objectScript = objectScript;
+            this.actionName = actionName;
+        }
     }
     public class MainMenuButton : MonoBehaviour
     {
@@ -47,9 +68,32 @@ namespace TunaszUtils
         public bool showButton;
         public Rect rect=new Rect(Vector2.zero,new Vector2( 300,100));
         public FontData textFont;
-
+        public bool actionsGiven=false;
         private void Awake()
-        { 
+        {
+
+            AddListenerToActions();
+        }
+        /// <summary>
+        /// Adds the methods to the actions list and adds them to the button press listener
+        /// </summary>
+        /// <param name="actions"></param>
+        public void AddMethods(params ButtonAction[] actions)
+        {
+            foreach (var action in actions)
+            {
+                actionsToPerform.Add(action);
+            }
+            AddListenerToActions();
+        }
+        /// <summary>
+        /// Adds the added methods to the button press listener
+        /// </summary>
+        public void AddListenerToActions()
+        {
+            if (actionsGiven) return;
+            
+            actionsGiven = true;
             for (int i = 0; i < actionsToPerform.Count; i++)
             {
                 actionsToPerform[i].methodInfos = new List<MethodInfo>();
@@ -57,20 +101,25 @@ namespace TunaszUtils
                 {
                     var mbs = (actionsToPerform[i].objectScript).GetComponents<MonoBehaviour>();
                     foreach (var mb in mbs)
-                    { 
-                        actionsToPerform[i].methodInfos.AddRange(mb.GetMethods().Where(x => x.Name.Contains(actionsToPerform[i].search)).ToList());
+                    {
+                        actionsToPerform[i].methodInfos.AddRange(mb.GetMethods().Where(x => actionsToPerform[i].search=="" || x.Name.Contains(actionsToPerform[i].search)).ToList());
                     }
                 }
-            } 
+            }
 
             for (int j = 0; j < actionsToPerform.Count; j++)
             {
-                var filteredMethods = actionsToPerform[j].methodInfos; 
+                var filteredMethods = actionsToPerform[j].methodInfos;
+                if (actionsToPerform[j].selectedScript==-1)
+                {
+                    actionsToPerform[j].selectedScript = filteredMethods.Select((x,i)=>new {MethodInfo=x ,Index=i}).
+                        First(x => x.MethodInfo.Name== actionsToPerform[j].actionName).Index;
+                }
                 var methodInfo = filteredMethods[actionsToPerform[j].selectedScript];
                 var par = filteredMethods[actionsToPerform[j].selectedScript].GetParameters();
-                List<object> datas=new List<object>();
+                List<object> datas = new List<object>();
                 for (int i1 = 0; i1 < par.Length; i1++)
-                { 
+                {
                     ParameterInfo item = par[i1];
                     if (item.ParameterType == typeof(int))
                     {
@@ -92,21 +141,23 @@ namespace TunaszUtils
                         datas.Add(actionsToPerform[j].values[i1].value);
 
                     }
-                } 
+                }
                 int selectedScript = j;
-                button.onClick.AddListener(() => { InvokeSelectedScript(
-                    actionsToPerform[selectedScript].objectScript.GetComponent(methodInfo.ReflectedType),
-                    methodInfo.Name,
-                    datas.ToArray()) ;
+                button.onClick.AddListener(() => {
+                    InvokeSelectedScript(
+                        actionsToPerform[selectedScript].objectScript.GetComponent(
+                            methodInfo.ReflectedType),
+                            methodInfo.Name,
+                            datas.ToArray());
                 });
 
 
-            } 
-
+            }
         }
         public void AddScriptToButtonListener(object target,string methodName,params object[] parameters)
         {
-            button.onClick.AddListener(() => { InvokeSelectedScript(target, methodName, parameters); });
+            button.onClick.AddListener(() => { print(target.ToString()); InvokeSelectedScript(target, methodName, parameters); });
+            
         }
 
         public static void InvokeSelectedScript(object target, string methodName, params object[] parameters)

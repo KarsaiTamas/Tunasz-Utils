@@ -33,6 +33,24 @@ namespace TunaszUtils
                 listToChange.Add(defaultValue);
             }
         }
+        public static void DefaultListSize<T>(List<T> listToChange, int amount, T defaultValue)
+        {
+
+            if (listToChange.Count == amount) return;
+
+            if (listToChange.Count > amount)
+            {
+                while (listToChange.Count > amount)
+                {
+                    listToChange.RemoveAt(amount - 1);
+                }
+                return;
+            }
+            while (listToChange.Count < amount)
+            {
+                listToChange.Add(defaultValue);
+            }
+        }
 
 
     }

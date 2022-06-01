@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Default URP CutScene Material
+  m_Shader: {fileID: -6465566751694194690, guid: 126cf4d6aa48817489bed00d5dc96d0f, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_92e198e3c96a40d58b9f3858c6cd65a1: 0
+    - Vector1_b0fdf6e241f94ad0a68c004e367b2dcc: 0.1
+    - Vector1_bf2043c725794e169cff798fd7c6d905: 1
+    - Vector1_dff3e4ef6db54c308eba11bf30674b08: 0.1
+    - _HideAmount: 0
+    - _Radius: 0.4
+    m_Colors:
+    - Color_6b14e973f757456385592cb51badf984: {r: 1, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
