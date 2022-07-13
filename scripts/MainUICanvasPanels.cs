@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace TunaszUtils
 {
+    [System.Serializable]
     public class MainUICanvasPanels : MonoBehaviour
     {
         //public static MainUICanvasPanels instance;
@@ -37,6 +38,7 @@ namespace TunaszUtils
             {
                 panels.Add(item.GetComponent< MainMenuPanel>());
                     panels[panels.Count - 1].id = panels.Count - 1;
+                panels[panels.Count - 1].relatedCanvas = this;
             }
         }
         public MainMenuPanel GetPanel(Enum panel)
@@ -62,6 +64,18 @@ namespace TunaszUtils
             SelectedPanel = Convert.ToInt32(panel);
 
         }
-
+        public void ChangePanelInCanvas(MainUICanvasPanels uICanvas,int panel,bool active)
+        {
+            panels[panel].gameObject.SetActive(active);
+            
+        }
+        public void ChangePanelInCanvasCloseRest(MainUICanvasPanels uICanvas, int panel)
+        {
+            foreach (var item in panels)
+            {
+                item.gameObject.SetActive(false);
+            }
+            SelectedPanel = panel;
+        }
     }
 }

@@ -57,7 +57,15 @@ namespace TunaszUtils
             go.transform.SetParent( Selection.activeTransform); 
             go.transform.localScale = Vector3.one;
             go.transform.localPosition = Vector3.zero;
+            var startingTransform= go.GetComponent<RectTransform>();
+            startingTransform.anchorMin = new Vector2(0, 0);
+            startingTransform.anchorMax = new Vector2(1, 1);
+            startingTransform.pivot= new Vector2(0.5f, 0.5f);
+            var goImage = go.GetComponent<Image>();
+            goImage.color = new Color(100, 60, 40, 30);
+            
             var panel = go.GetComponent<MainMenuPanel>();
+            panel.childButtonHolder = new List<Transform>();
             panel.childButtonHolder.Add(go.transform);
 
         }

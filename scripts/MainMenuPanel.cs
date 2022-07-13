@@ -10,14 +10,20 @@ namespace TunaszUtils
     {
         public int id;
         private int count;
+        public MainUICanvasPanels relatedCanvas;
         public List<MainMenuButton> childButtons;
         public List<Transform> childButtonHolder;
 
         public void OnValidate()
         {
-            if (childButtonHolder==null || childButtonHolder.Count==0)
+            if (childButtonHolder==null)
+            {
+                childButtonHolder = new List<Transform>(); 
+            }
+            if (childButtonHolder.Count == 0)
             {
                 childButtonHolder.Add(transform);
+
             }
             if (childButtons==null)
             {

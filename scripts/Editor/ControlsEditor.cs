@@ -63,7 +63,9 @@ namespace TunaszUtils
             EditorGUI.BeginChangeCheck();
             serializedObject.ApplyModifiedProperties();
             serializedObject.Update();
-            var enumStringList = EnumExtenstions.GetWithOrder(System. Type.GetType(componentTypeName_Prop.stringValue)).ToArray();
+             
+            try {
+                var enumStringList = EnumExtenstions.GetWithOrder(System.Type.GetType(componentTypeName_Prop.stringValue)).ToArray();
 
             if (EditorGUI.EndChangeCheck() || controlNames_Prop.arraySize!= enumStringList.Length)
             {
@@ -141,6 +143,11 @@ namespace TunaszUtils
 
             }
 
+            }
+            catch
+            {
+
+            }
             serializedObject.ApplyModifiedProperties();
 
         }

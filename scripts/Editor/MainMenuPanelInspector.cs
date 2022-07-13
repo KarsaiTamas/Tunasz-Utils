@@ -180,6 +180,7 @@ namespace TunaszUtils
                 serializedObject.Update();
 
             }
+            if (buttons == null) return;
             for (int i = 0; i < buttons.Count; i++)
             {
                 SerializedButton button = buttons[i];
@@ -401,8 +402,11 @@ namespace TunaszUtils
                                                 curValue.FindPropertyRelative("value")
                                                 ));
                                         }
-                                        
 
+                                        if (par[0].ParameterType == typeof(MainUICanvasPanels))
+                                        {
+                                            continue;
+                                        }
                                         ParameterInfo item = par[i1];
                                         if (item.ParameterType == typeof(int))
                                         {
@@ -427,6 +431,25 @@ namespace TunaszUtils
                                         }
 
                                     }
+
+                                    if (par.Length == 2 && par[0].ParameterType == typeof(MainUICanvasPanels) && par[1].ParameterType == typeof(int))
+                                    {  
+                                        string[] panelsList= targetPanel.relatedCanvas.panels.Select(x=>x.name).ToArray();
+                                         buttonAction.values[1].selectedValue_Prop.intValue = EditorGUILayout.Popup("Panel To Show", buttonAction.values[1].selectedValue_Prop.intValue, panelsList);
+                                        buttonAction.values[1].value_Prop.stringValue = buttonAction.values[1].selectedValue_Prop.intValue.ToString();
+                                    }
+                                    
+                                    if (par.Length == 3 && par[0].ParameterType == typeof(MainUICanvasPanels) && par[1].ParameterType == typeof(int) && par[2].ParameterType==typeof(bool))
+                                    {
+                                        string[] panelsList = targetPanel.relatedCanvas.panels.Select(x => x.name).ToArray();
+                                        buttonAction.values[1].selectedValue_Prop.intValue = EditorGUILayout.Popup("Panel To Activate", buttonAction.values[1].selectedValue_Prop.intValue, panelsList);
+                                        buttonAction.values[1].value_Prop.stringValue = panelsList[buttonAction.values[1].selectedValue_Prop.intValue];
+                                        buttonAction.values[2].selectedValue_Prop.intValue = Convert.ToInt32(EditorGUILayout.Toggle("Activate Panel", Convert.ToBoolean(buttonAction.values[2].selectedValue_Prop.intValue)));
+                                        buttonAction.values[2].value_Prop.stringValue = buttonAction.values[2].selectedValue_Prop.boolValue.ToString();
+
+
+                                    }
+
 
 
                                 }

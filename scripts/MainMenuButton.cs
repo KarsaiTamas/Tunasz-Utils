@@ -123,6 +123,7 @@ namespace TunaszUtils
                     ParameterInfo item = par[i1];
                     if (item.ParameterType == typeof(int))
                     {
+
                         datas.Add(Convert.ToInt32(actionsToPerform[j].values[i1].value));
                     }
                     else if (item.ParameterType.IsEnum)
@@ -169,6 +170,11 @@ namespace TunaszUtils
 
             for (int i = 0; i < pinfos.Length; i++)
             {
+                if (pinfos[i].ParameterType== typeof(MainUICanvasPanels))
+                {
+                    parameters[i] = new MainUICanvasPanels();
+                    continue;
+                }
                 if (!pinfos[i].ParameterType.IsInstanceOfType(parameters[i]))
                     parameters[i] = Convert.ChangeType(parameters[i], pinfos[i].ParameterType);
             }
