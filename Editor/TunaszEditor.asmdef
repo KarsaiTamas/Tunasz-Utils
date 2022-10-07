@@ -1,0 +1,18 @@
+{
+    "name": "TunaszEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8e1406837dfc89a449008798006df61c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
